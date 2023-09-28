@@ -1,66 +1,175 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Laravel Booking System
 
-## About Laravel
+A Laravel application for booking seats on trips.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Description
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The Laravel Booking System is an application that allows users to book seats for specific trips. This README provides documentation for the `bookSeat` method, which handles seat bookings in the system.
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+To get started with this Laravel project, follow these steps:
 
-## Learning Laravel
+1. **Clone the Repository**: Clone this repository to your local machine using Git:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    ```bash
+    git clone https://github.com/AbdallahMostafa/bus-booking-system
+    ```
+2. **Install Dependencies**: Navigate to the project's root directory and install the 
+Build the containers and their Depedenecies:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    ```bash
+    cd bus-booking-system
+    bash init.sh
+    ```
+3. **Create Environment File**: Copy the `.env.example` file to `.env` and update it with your configuration settings such as database connection, app key, and other environment-specific variables:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    ```bash
+    cp .env.example .env
+    ```
+4. **Generate Application Key (Docker)**: If you are running the Laravel project within a Docker container, you can generate the application key by executing the following command within the container:
 
-## Laravel Sponsors
+   ```bash
+   docker exec -it laravel php artisan key:generate
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Register User API
 
-### Premium Partners
+This endpoint allows users to register a new account.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### Request
 
-## Contributing
+- **Method**: POST
+- **Endpoint**: `/api/register`
+- **Headers**:
+  - `Content-Type` (string): `application/json`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### Request Body
 
-## Code of Conduct
+The request body should contain JSON data with the following fields:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- `name` (string, required): The name of the user.
+- `email` (string, required): The email address of the user.
+- `password` (string, required): The user's password.
 
-## Security Vulnerabilities
+Example Request:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```json
+POST /api/register
+Content-Type: application/json
 
-## License
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+## User Login API
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This endpoint allows registered users to log in and obtain an authentication token.
+
+### Request
+
+- **Method**: POST
+- **Endpoint**: `/api/login`
+- **Headers**:
+  - `Content-Type` (string): `application/json`
+
+#### Request Body
+
+The request body should contain JSON data with the following fields:
+
+- `email` (string, required): The email address of the user.
+- `password` (string, required): The user's password.
+
+Example Request:
+
+```json
+POST /api/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+# Available Seats API
+
+The "Available Seats" API provides information about the available seats on a specific trip between two stations. It allows you to check which seats are available for booking.
+
+## Endpoint
+
+- **URL**: `/api/available-seats`
+- **HTTP Method**: GET
+- **Headers**:
+  - `Authorization` (string): A Bearer token for authentication.
+
+## Request Parameters
+
+- `departure_location_id` (string, required): The name of the departure station.
+- `arrival_location_id` (string, required): The name of the arrival station.
+
+## Response
+
+- **HTTP Status Code**: 200 (OK)
+- **Content Type**: JSON
+
+### Successful Response
+
+If there are available seats for booking, the API will respond with a JSON object containing an array of available seat numbers.
+
+Example:
+```json
+{
+  "available_seats": [1, 2, 3, 4, 5]
+}
+```
+# Book Seats API
+
+The `bookSeat` method is used to book a seat for a user on a specific trip.
+
+### Request
+
+- **Method**: POST
+- **Endpoint**: `/api/book-seat`
+- **Headers**:
+  - `Authorization` (string): A Bearer token for authentication.
+
+- **Parameters**:
+
+  - `departure_location_id` (string): The name of the departure station.
+  - `arrival_location_id` (string): The name of the arrival station.
+  - `seat_id` (int): The ID of the seat to be booked.
+
+### Response
+
+#### Success Response
+
+- **Status Code**: 200 OK
+- **Data**:
+  - `Booked Successfully` (object): Details of the reservation.
+
+#### Error Response
+
+- **Status Code**: 401 Unauthorized
+- **Data**:
+  - `error` (string): Error message indicating that the token is invalid.
+
+- **Status Code**: 422 Unprocessable Entity
+- **Data**:
+  - `message` (string): Error message indicating that the seat is already booked or unavailable.
+
+- **Status Code**: 500 Internal Server Error
+- **Data**:
+  - `message` (string): Error message indicating that an error occurred while booking the seat.
+
+```POST /api/book-seat
+Content-Type: application/json
+Authorization: Bearer your-auth-token
+
+{
+  "departure_location_id": "Cairo",
+  "arrival_location_id": "Asyut",
+  "seat_id": 1
+}
+```
